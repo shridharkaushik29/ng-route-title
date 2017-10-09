@@ -1,0 +1,29 @@
+{
+  "name": "ng-route-title",
+  "authors": [
+    "shridharkaushik29 <shridharkaushik29@gmail.com>"
+  ],
+  "description": "A great way to add title when using ng-route",
+  "main": "ng-route-title.js",
+  "keywords": [
+    "ng-title",
+    "ng-route-title",
+    "angular-title",
+    "angular",
+    "page",
+    "titles"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.6",
+    "angular-route": "^1.6.6"
+  }
+}
