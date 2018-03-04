@@ -1,69 +1,97 @@
-angular.module('ngRouteTitle', ['ngRoute'])
+angular.module('ngRouteTitle', [])
 
         .provider('$title', function () {
-            var appName = "Angular App";
-            var template = "{{title ? title : 'Loading...'}} | {{appName}}";
+            var config = {template: "{{$root.progress ? 'Loading...' : title}} | {{appName}}",
+                appName: "Angular App"
+            };
 
-            this.appName = function (value) {
-                appName = value;
+            this.setTemplate = function (template) {
+                config.template = template;
             }
 
-            this.setTemplate = function (value) {
-                template = value;
+            this.setAppName = function (name) {
+                config.appName = name;
             }
 
-            this.$get = ['$rootScope', function ($rootScope) {
-                    return {
-                        template: template,
-                        appName: appName,
-                        set: function (title) {
-                            this.title = title;
-                            $rootScope.$title = title;
-                        },
-                        get: function () {
-                            return $rootScope.$title;
-                        }
+            this.$get = ['$rootScope',
+                '$compile',
+                function ($rootScope, $compile) {
+                    var service = {};
+                    var scope = $rootScope.$new();
+
+                    scope.appName = config.appName;
+
+                    document.title = config.template;
+
+                    $compile(document.querySelector('title'))(scope)
+
+                    service.set = function (title) {
+                        $rootScope.$title = title;
+                        scope.title = title;
                     }
+
+                    return service;
                 }
             ]
         })
 
-        .run(['$title', '$rootScope', function ($title, $rootScope) {
-                $rootScope.$on('$routeChangeStart', function () {
-                    $title.set("Loading...")
-                })
+        .run([
+            '$title',
+            '$rootScope',
+            '$injector',
+            function ($title, $rootScope, $injector) {
 
-                $rootScope.$on('$routeChangeError', function (e, current) {
-                    $title.set("Oops! An Error Occured")
-                })
+                var $route;
+                var $transitions;
+                var $stateParams;
 
-                $rootScope.$on('$routeChangeSuccess', function (e, current) {
-                    if (current && current.$$route) {
-                        if (angular.isString(current.$$route.title)) {
-                            $title.set(current.$$route.title);
-                        } else if (current.$$route.title === undefined) {
-                            $title.set("Untitled");
+                if ($injector.has("$route")) {
+                    $route = $injector.get("$route");
+                } else if ($injector.has("$transitions")) {
+                    $transitions = $injector.get("$transitions");
+                    $stateParams = $injector.get("$stateParams");
+                }
+
+                if ($transitions) {
+
+
+                    $transitions.onSuccess({}, function (transition) {
+                        $rootScope.progress = false;
+                        var to = transition.to();
+                        if (to) {
+                            var title = to.title;
+                            if (title === undefined) {
+                                $title.set("Untitled");
+                            } else if (title !== false) {
+                                $title.set(title);
+                            }
+                        } else {
+                            $title.set("404: Not Found");
                         }
-                    } else {
-                        $title.set("404: Not Found");
-                    }
-                })
-            }
-        ])
+                    });
 
-        .directive('title', ['$title', function ($title) {
-                return {
-                    scope: true,
-                    restrict: 'E',
-                    template: $title.template,
-                    link: function ($scope) {
-                        $scope.appName = $title.appName;
-                        $scope.$watch(function () {
-                            return $title.title;
-                        }, function (value) {
-                            $scope.title = value;
-                        })
-                    }
+                } else if ($route) {
+
+                    $rootScope.$on('$routeChangeStart', function () {
+                        $title.set("Loading...")
+                    })
+
+                    $rootScope.$on('$routeChangeError', function (e, current) {
+                        $title.set("Oops! An Error Occured")
+                    })
+
+                    $rootScope.$on('$routeChangeSuccess', function (e, current) {
+                        $rootScope.progress = false;
+                        if (current && current.$$route) {
+                            if (angular.isString(current.$$route.title)) {
+                                $title.set(current.$$route.title);
+                            } else if (current.$$route.title === undefined) {
+                                $title.set("Untitled");
+                            }
+                        } else {
+                            $title.set("404: Not Found");
+                        }
+                    })
                 }
             }
         ])
