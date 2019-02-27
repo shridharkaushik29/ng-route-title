@@ -1,6 +1,6 @@
 {
   "name": "ng-route-title",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Route Title for AngularJS",
   "scripts": {
     "watch_ts": "tsc --watch"

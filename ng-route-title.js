@@ -13,9 +13,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var angular_1 = __importDefault(require("angular"));
 var _ = __importStar(require("lodash"));
 var TitleService = /** @class */ (function () {
-    function TitleService($rootScope, $compile) {
+    function TitleService($rootScope, $compile, config) {
         this.$rootScope = $rootScope;
         this.$compile = $compile;
+        this.config = config;
         this.$scope = this.$rootScope.$new();
         this.$scope.appName = this.config.appName;
         document.title = this.config.template;
@@ -29,6 +30,7 @@ var TitleService = /** @class */ (function () {
 }());
 var TitleProvider = /** @class */ (function () {
     function TitleProvider() {
+        var _this = this;
         this.config = {
             template: "{{$root.progress ? 'Loading...' : title}} | {{appName}}",
             appName: "Angular App"
@@ -36,7 +38,8 @@ var TitleProvider = /** @class */ (function () {
         this.$get = ['$rootScope',
             '$compile',
             function ($rootScope, $compile) {
-                return new TitleService($rootScope, $compile);
+                var service = new TitleService($rootScope, $compile, _this.config);
+                return service;
             }
         ];
     }

@@ -3,14 +3,16 @@ import * as _ from "lodash";
 
 class TitleService {
 
-    config: {
-        template: string,
-        appName: string
-    }
-
     $scope: any = this.$rootScope.$new()
 
-    constructor(private $rootScope: any, private $compile: ICompileService) {
+    constructor(
+        private $rootScope: any,
+        private $compile: ICompileService,
+        private config: {
+            template: string,
+            appName: string
+        }
+    ) {
         this.$scope.appName = this.config.appName;
         document.title = this.config.template;
         $compile(document.querySelector('title'))(this.$scope)
@@ -41,7 +43,8 @@ class TitleProvider {
     $get = ['$rootScope',
         '$compile',
         ($rootScope, $compile: ICompileService) => {
-            return new TitleService($rootScope, $compile);
+            const service = new TitleService($rootScope, $compile, this.config);
+            return service
         }
     ]
 }
