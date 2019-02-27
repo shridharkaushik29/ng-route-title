@@ -1,0 +1,31 @@
+{
+  "name": "ng-route-title",
+  "version": "1.0.1",
+  "description": "Route Title for AngularJS",
+  "scripts": {
+    "watch_ts": "tsc --watch"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/shridharkaushik29/ng-route-title.git",
+  "author": "Shridhar Sharma <shridharkaushik29@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.29.5",
+    "ts-loader": "^5.3.3",
+    "webpack-cli": "^3.2.3",
+    "angular": "^1.7.7",
+    "lodash": "^4.17.11",
+    "angular-route": "^1.7.7",
+    "@uirouter/angularjs": "^1.0.22",
+    "typescript": "^3.3.3333",
+    "@types/node": "^11.9.5",
+    "@types/angular": "^1.6.54",
+    "@types/lodash": "^4.14.121",
+    "@types/angular-route": "^1.7.0"
+  },
+  "peerDependencies": {
+    "angular": "1.*",
+    "angular-route": "^1.7.7",
+    "@uirouter/angularjs": "1.0.*"
+  }
+}

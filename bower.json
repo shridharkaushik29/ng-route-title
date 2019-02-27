@@ -4,7 +4,7 @@
     "shridharkaushik29 <shridharkaushik29@gmail.com>"
   ],
   "description": "A great way to add title when using ng-route",
-  "main": "ng-route-title.js",
+  "main": "dist/ng-route-title.js",
   "keywords": [
     "ng-title",
     "ng-route-title",
